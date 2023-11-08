@@ -7,7 +7,7 @@
 ## 1.1 Access Kafka cluster
 
 Helm chart Kafka installation instructions to access kafka cluster.
-**client.properties** file is located ar kafka-app/config, kafka password is encoded and hardcoded in script, should be saved as AWS Secret and mounted to kafka pods.  
+**client.properties** file is located at **kafka-app/config**, kafka password is encoded and hardcoded in script, should be saved as AWS Secret and mounted to kafka pods.  
 
 >    NAME: kafka
 >    LAST DEPLOYED: Tue Nov  7 11:58:13 2023
@@ -84,7 +84,7 @@ Check topic was created:
     --command-config /tmp/client.properties
 
 
-# 1. Install kafka-app
+# 2. Install kafka-app
 
 Assignment application is packaged as Helm chart in **kafka-app** folder:
 
