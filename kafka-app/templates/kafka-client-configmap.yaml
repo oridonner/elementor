@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kafka-client-config
+  namespace: {{ .Release.Namespace }}
+data:
+  client.properties: |-
+    {{ .Files.Get "config/client.properties" | nindent 8 }}

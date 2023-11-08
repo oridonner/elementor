@@ -1,0 +1,11 @@
+# Various IDEs
+.idea/
+*.swp
+*.swo
+
+# Log files
+*.log
+
+# Helm specific
+_charts/
+tmp/

@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kafka-producer
+  namespace: {{ .Values.namespace }}
+spec:
+  containers:
+  - name: kafka-producer
+    image: {{ .Values.producer.image }}
+    env:
+      - name: AWS_ACCESS_KEY_ID
+        valueFrom:
+          secretKeyRef:
+            name: aws-secret
+            key: access_key
+      - name: AWS_SECRET_ACCESS_KEY
+        valueFrom:
+          secretKeyRef:
+            name: aws-secret
+            key: secret_key
+      - name: INTERVAL
+        value: "{{ .Values.producer.interval }}"
+      - name: TOPIC
+        value: "{{ .Values.kafka.topic }}"
+      - name: BOOTSTRAP_SERVERS
+        value: "{{ .Values.kafka.bootstrapServers }}"
+    command: ["/bin/bash"]
+    args: ["/scripts/kafka-producer.sh"]
+    volumeMounts:
+      - name: kafka-producer-script
+        mountPath: /scripts
+        readOnly: true
+      - name: kafka-client-config
+        mountPath: /kafka/config
+  volumes:
+    - name: kafka-producer-script
+      configMap:
+        name: kafka-producer-script
+        defaultMode: 0755
+    - name: kafka-client-config
+      configMap:
+        name: kafka-client-config

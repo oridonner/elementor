@@ -1,0 +1,19 @@
+namespace: ori
+
+producer:
+  image: oridonner/elementor-kafka:3.6.0
+  interval: 60 
+
+consumer:
+  image: oridonner/elementor-kafka:3.6.0
+
+aws:
+  region: eu-west-1
+  secretName: aws-secret
+  bucketName: elementor-data-candidates-bucket
+  output: json
+
+kafka:
+  bootstrapServers: kafka.ori.svc.cluster.local:9092
+  topic: cpu-metrics
+  groupId: cpu-metrics-consumer-group

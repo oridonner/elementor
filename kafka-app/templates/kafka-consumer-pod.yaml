@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kafka-consumer
+  namespace: {{ .Values.namespace }}
+spec:
+  containers:
+  - name: kafka-consumer
+    image: {{ .Values.consumer.image }}
+    command: ["/bin/bash"]
+    args: ["/scripts/consume-and-upload.sh"]
+    env:
+      - name: AWS_ACCESS_KEY_ID
+        valueFrom:
+          secretKeyRef:
+            name: aws-secret
+            key: access_key
+      - name: AWS_SECRET_ACCESS_KEY
+        valueFrom:
+          secretKeyRef:
+            name: aws-secret
+            key: secret_key
+      - name: AWS_REGION
+        value: {{ .Values.aws.region }}
+      - name: AWS_BUCKET
+        value: {{ .Values.aws.bucketName }}
+      - name: GROUP_ID
+        value: {{ .Values.kafka.groupId }}
+      - name: TOPIC
+        value: {{ .Values.kafka.topic }}
+      - name: BOOTSTRAP_SERVERS
+        value: "{{ .Values.kafka.bootstrapServers }}"
+    volumeMounts:
+      - name: kafka-consumer-script
+        mountPath: /scripts
+      - name: aws-config
+        mountPath: /root/.aws
+      - name: kafka-client-config
+        mountPath: /kafka/config
+  volumes:
+    - name: kafka-consumer-script
+      configMap:
+        name: kafka-consumer-script
+        defaultMode: 0755
+    - name: aws-config
+      configMap:
+        name: aws-config
+    - name: kafka-client-config
+      configMap:
+        name: kafka-client-config

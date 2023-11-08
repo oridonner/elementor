@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kafka-consumer-script
+  namespace: {{ .Values.namespace }}
+data:
+  consume-and-upload.sh: |-
+    {{ .Files.Get "files/consume-and-upload.sh" | nindent 4 }}
